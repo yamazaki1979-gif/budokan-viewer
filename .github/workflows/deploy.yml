@@ -16,10 +16,9 @@ jobs:
           mkdir site
           cp index.html model.meta.json scene_extra.json site/
           cd site
-          curl -fL "https://drive.usercontent.google.com/download?id=1NksqnaBhTi5GTpm7j4F0xKvsyZDxOnhi&export=download&confirm=t" -o model-29654a38.p0.wasm
-          curl -fL "https://drive.usercontent.google.com/download?id=1BxTWJT36dbqxhhJkgrl74zNpMt0N292l&export=download&confirm=t" -o model-29654a38.p1.wasm
-          curl -fL "https://drive.usercontent.google.com/download?id=1bqoN0q_EOOyoAAtKabK8rMswr7E3kBdj&export=download&confirm=t" -o model-29654a38.p2.wasm
-          curl -fL "https://drive.usercontent.google.com/download?id=1BGCYwXZCf3BZRiV3E-vLThRwj8NCP-mY&export=download&confirm=t" -o model-29654a38.p3.wasm
+          curl -fL "https://drive.usercontent.google.com/download?id=1wW0jb4rnkV3EKXDLa_-KmWDZEWlidGwn&export=download&confirm=t" -o model-5c4d0340.p0.wasm
+          curl -fL "https://drive.usercontent.google.com/download?id=1FBtxhd0JM1Es2iG2bsIpqDsXZj4s-dn_&export=download&confirm=t" -o model-5c4d0340.p1.wasm
+          curl -fL "https://drive.usercontent.google.com/download?id=1qWPrSahMiEzgVPtpd-wAOTBFubpPRbfZ&export=download&confirm=t" -o model-5c4d0340.p2.wasm
           touch .nojekyll
           ls -la
       - uses: actions/configure-pages@v5
