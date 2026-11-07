@@ -368,10 +368,13 @@ document.getElementById('demoBtn').addEventListener('click',showDemo);
 
 function startLoad(ENCKEY){
   function fetchPart(p, tries){
-    return fetch(p,{cache:'no-store'}).then(function(r){
+    var ctrl=new AbortController();
+    var tm=setTimeout(function(){ctrl.abort();},150000);
+    return fetch(p+'?r='+tries,{cache:'no-store',signal:ctrl.signal}).then(function(r){
       if(!r.ok)throw new Error('HTTP '+r.status+' '+p);
       return r.arrayBuffer().then(function(b){return decShield(ENCKEY,b);});
-    }).catch(function(e){
+    }).then(function(b){clearTimeout(tm);return b;}).catch(function(e){
+      clearTimeout(tm);
       if(tries>0)return fetchPart(p,tries-1);
       throw e;
     });
@@ -382,7 +385,7 @@ function startLoad(ENCKEY){
     var got=0,total=meta.parts.length;
     setMeta('モデル取得中… 0/'+total);
     return Promise.all(meta.parts.map(function(p,idx){
-      return fetchPart(p,2).then(function(buf){
+      return fetchPart(p,3).then(function(buf){
         got++;setMeta('モデル取得中… '+got+'/'+total);
         return {idx:idx,buf:buf};
       });
@@ -585,7 +588,7 @@ window.DBG={scene:scene,camera:camera,controls:controls,renderer:renderer,
  </div>
 </div>
 <script>
-var ENC_SALT='budokan-v1', ENC_CHECK='RU5DMRtJeNrMhfC3+LV2BrpUIoPZH8bbyRCS5bex2Oemcg==';
+var ENC_SALT='budokan-v1', ENC_CHECK='RU5DMYrbYeuB3QSlmfg33CQV3Mb3SYuwdE8gjDCMDeINBw==';
 function b64u8(s){return Uint8Array.from(atob(s),function(c){return c.charCodeAt(0)});}
 function deriveKey(pw){return crypto.subtle.importKey('raw',new TextEncoder().encode(pw),'PBKDF2',false,['deriveKey']).then(function(km){return crypto.subtle.deriveKey({name:'PBKDF2',salt:new TextEncoder().encode(ENC_SALT),iterations:300000,hash:'SHA-256'},km,{name:'AES-GCM',length:256},false,['decrypt']);});}
 function decShield(key,buf){var u=new Uint8Array(buf);if(u.length<17||u[0]!==69||u[1]!==78||u[2]!==67||u[3]!==49)return Promise.resolve(buf);return crypto.subtle.decrypt({name:'AES-GCM',iv:u.slice(4,16)},key,u.slice(16));}
